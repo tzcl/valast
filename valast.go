@@ -601,7 +601,7 @@ func computeAST(v reflect.Value, opt *Options, cycleDetector *cycleDetector, pro
 		}, nil
 	case reflect.String:
 		s := v.String()
-		wantRawStringLiteral := len(s) > 40 && strings.Contains(s, "\n")
+		wantRawStringLiteral := strings.Contains(s, "\n")
 		wantRawStringLiteral = wantRawStringLiteral || strings.Contains(s, `"`)
 		if wantRawStringLiteral && !strings.Contains(s, "`") {
 			return basicLit(vv, token.STRING, "string", "`"+s+"`", opt.withUnqualify(), typeExprCache)
@@ -723,7 +723,7 @@ func unexported(v reflect.Value) reflect.Value {
 
 // timeTypeASTExpr returns the AST expression equivalent of
 //
-// 	time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC)
+//	time.Date(2000, 1, 1, 0, 0, 0, 0, time.UTC)
 func timeTypeASTExpr(t time.Time) ast.Expr {
 	return &ast.CallExpr{
 		Fun: &ast.SelectorExpr{
